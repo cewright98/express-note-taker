@@ -32,5 +32,18 @@ router.post('/notes', (req, res) => {
 });
 
 // create route to delete a note (optional)
+router.delete('/notes/:id', (req, res) => {
+    const id = req.params.id;
+    const noteToDelete = database.find(data => data.id == id);
+    const noteIndex = database.indexOf(noteToDelete);
+
+    database.splice(noteIndex, 1);
+
+    fs.writeFileSync(
+        path.join(__dirname, '../db/db.json'),
+        JSON.stringify(database, null, 2)
+    );
+    res.status(204).send('Note deleted');
+});
 
 module.exports = router;
